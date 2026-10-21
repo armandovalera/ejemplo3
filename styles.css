@@ -1,0 +1,315 @@
+/* ==========================================================================
+   Portal de navegación — Diez experiencias hero
+   HTML5 semántico + CSS3 puro. Sin frameworks ni dependencias externas.
+   ========================================================================== */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --bg-page: #0b0d12;
+  --bg-elevated: #141821;
+  --bg-elevated-hover: #1b2130;
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --surface-border-strong: rgba(255, 255, 255, 0.18);
+  --text-primary: #f4f5f7;
+  --text-secondary: #b8bec9;
+  --text-muted: #7f8794;
+  --focus-ring: #8fb8ff;
+
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+
+  --shadow-rest: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 18px 40px -12px rgba(0, 0, 0, 0.7);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  color-scheme: dark;
+}
+
+/* ---------- Reset mínimo ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(143, 184, 255, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 90% 0%, rgba(217, 75, 43, 0.08), transparent 55%),
+    var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Accesibilidad ---------- */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--text-primary);
+  color: var(--bg-page);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  top: 16px;
+}
+
+/* ---------- Cabecera ---------- */
+.portal-header {
+  padding: clamp(48px, 9vw, 120px) clamp(20px, 5vw, 64px) clamp(32px, 5vw, 56px);
+}
+
+.portal-header__inner {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.portal-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.portal-title {
+  font-size: clamp(36px, 6.4vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  text-wrap: balance;
+  margin-bottom: 24px;
+}
+
+.portal-intro {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: clamp(15px, 1.5vw, 18px);
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* ---------- Cuadrícula de tarjetas ---------- */
+.portal-main {
+  padding: 0 clamp(20px, 5vw, 64px) clamp(48px, 6vw, 80px);
+}
+
+.cards-grid {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(16px, 2vw, 24px);
+  grid-template-columns: 1fr; /* móvil: 1 columna */
+}
+
+@media (min-width: 620px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 980px) {
+  .cards-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1320px) {
+  .cards-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ---------- Tarjeta ---------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elevated);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-rest);
+  transition:
+    transform 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out),
+    background-color 0.35s var(--ease-out);
+}
+
+/* Realce superior con el color de acento de cada página */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--card-accent, var(--focus-ring));
+  opacity: 0.85;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-6px);
+  background: var(--bg-elevated-hover);
+  border-color: var(--surface-border-strong);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Zona visual: monograma sobre degradado sutil */
+.card__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  padding: 24px;
+  background:
+    radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--card-accent) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.card__monogram {
+  font-size: clamp(34px, 4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--card-accent, var(--text-primary));
+  text-shadow: 0 0 24px color-mix(in srgb, var(--card-accent) 45%, transparent);
+}
+
+/* Contenido textual */
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px 8px;
+  flex: 1;
+}
+
+.card__tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--card-accent) 70%, var(--text-muted));
+}
+
+.card__title {
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.card__text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* Enlace inferior que cubre toda la tarjeta */
+.card__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding: 16px 22px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-top: 1px solid transparent;
+  transition:
+    color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    background-color 0.25s var(--ease-out);
+}
+
+/* Área táctil cómoda y foco accesible */
+.card__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.card__link:hover {
+  color: var(--card-accent, var(--focus-ring));
+  border-color: var(--surface-border);
+}
+
+.card__arrow {
+  display: inline-block;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.card__link:hover .card__arrow {
+  transform: translateX(4px);
+}
+
+/* El foco debe verse en la tarjeta completa */
+.card__link:focus-visible {
+  outline: none;
+}
+
+.card:focus-within {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ---------- Pie ---------- */
+.portal-footer {
+  padding: 28px clamp(20px, 5vw, 64px) 48px;
+  border-top: 1px solid var(--surface-border);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- Movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+}
